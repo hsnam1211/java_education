@@ -1,0 +1,124 @@
+@charset "UTF-8";
+
+/* 배경 */
+html, body {   
+    background-color: rgb(249, 248, 240);
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/*sidebar 로고 */
+a img:first-child   
+{
+	margin: 77px;
+	width: 220px;
+	position: relative;
+	z-index: 2;
+}
+
+/* sidebar */
+#sidebar_warpper
+{
+	background-color: rgb(239, 238, 226);
+	float: left;
+	width: 370px;
+	left: -370px;
+	height:100%;
+	position: fixed;
+	top:0;
+	z-index: 1;
+	border-right: 1px dotted #d3d3d3;
+	transition: 1s ease-in;
+}
+/* sidebar 마우스 over시 슬라이드 효과 */
+#sidebar_warpper:hover {
+	transform: translateX(370px);
+}
+
+/* sidebar 마우스 over시 슬라이드 효과 */
+#sidebar_list {
+	display:inline-flex;
+	flex-direction: column;
+	top: 430px;
+	left: 150px;
+	position: absolute;
+}
+
+/* sidebar 목록의 간격 띄우는 표시인 "|" 디자인 */
+#sidebar_list > a
+{
+	position: relative;
+	font-family: 'Noto Serif KR', serif;
+	color: black;
+	text-decoration:none;
+	text-align: center;
+}
+ 
+/* sidebar의 목록에 마우스 over시 color change효과 */
+#sidebar_list > a:hover 
+{
+	color: gray;
+}
+
+/* sidebar 손잡이 디자인 */
+#sidebar_warpper .sidebar_btn {
+	border: 0;
+	outline: 0;
+	position: absolute;
+	z-index: 10;
+	left: 370px;
+	border-radius: 0 20% 20% 0;
+	top:500px;
+	width: 16px;
+    height: 38px;
+    top: 445px;
+	background-color: #d3d3d3;
+}
+
+/* contents */
+#contents {
+	border: 1px solid black;
+	width: 1200px;
+	height: 100%;
+	margin: 0 auto;	
+}
+
+#book_img {
+	border: 1px solid black;
+	width: 200px;
+	height: 350px;	
+}
+
+#contents td {
+	text-align: center;
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
