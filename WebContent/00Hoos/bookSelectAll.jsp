@@ -15,15 +15,14 @@
 		<a href="start.html"><img src="/webProject(hoos)/00Hoos/images/스케치.png"></a>
 		<button class="sidebar_btn" type="button">> </button>
 		<div id="sidebar_list">
-					<a class="user_login" href="bookSelectAll.jsp">도서 검색</a>
-					<p>|</p>
-					<a class="admin_login" href="#">도서 대출</a>
-					<p>|</p>
-					<a class="main_page" href="#">도서 반납</a>
-				</div>
+			<a class="user_login" href="bookSelectAll.jsp">도서 검색</a>
+			<p>|</p>
+			<a class="admin_login" href="#">도서 대출</a>
+			<p>|</p>
+			<a class="main_page" href="#">도서 반납</a>
+		</div>
 	</aside>
-	<div id="contents">		
-			
+	<div id="contents">			
 		<%
 			LibDAO dao = new LibDAO();
 			List<LibBookVO> libList = dao.getBook(1);
