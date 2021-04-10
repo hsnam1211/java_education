@@ -42,16 +42,14 @@ public class LibDAO {
 				}
 				if(input_id == null || input_pass == null || id == null ||(id.equals(input_id) && !pass.equals(input_pass)) || (!id.equals(input_id) && pass.equals(input_pass))) {
 					System.out.println("계정이 올바르지 않습니다.");
+					return "no_id";
 				} else if(id.equals(input_id) && pass.equals(input_pass) && admin!=null) {
-					
 					System.out.println("관리자 승인 확인");
 					return id;
-					
-				} else if(id.equals(input_id) && pass.equals(input_pass) && admin==null) {
-					
+				} else if(id.equals(input_id) && pass.equals(input_pass) && admin==null) {					
 					System.out.println("관리자 승인이 필요합니다.");
+					return "no_admin";
 				}
-				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -74,8 +72,8 @@ public class LibDAO {
 				}
 				
 				if(input_id == null || input_pass == null || id == null ||(id.equals(input_id) && !pass.equals(input_pass)) || (!id.equals(input_id) && pass.equals(input_pass))) {
-					
 					System.out.println("계정이 올바르지 않습니다.");
+					return "no_id";
 				} else if(id.equals(input_id) && pass.equals(input_pass)) {
 					
 					System.out.println("관리자 입니다.");

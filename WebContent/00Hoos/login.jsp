@@ -1,26 +1,35 @@
 <%@page import="model.LibDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-<h1>로그인을 체크합니다.</h1>
-<hr>
+
 <%
 	String userid = request.getParameter("userid");
 	String userpass = request.getParameter("userpass");
 	LibDAO dao = new LibDAO();
-	String id = dao.login(userid, userpass, 1);
+	String id = null;
+	int id_num = 1;
+	
+	if(userid.equals("admin1")) { id_num = 2; }
+	
+	id = dao.login(userid, userpass, id_num);
+	
+	if(id.equals("no_admin")) {
+		out.print("<p>관리자 승인이 필요합니다.</p>");
+	} else if(id.equals("no_id")) {
+		out.print("<p>계정이 올바르지 않습니다.</p>");		
+	} else if(id.equals("admin1")) {
+		out.print("<p>관리자 입니다.</p>");		
+		%>
+		<script>
+			location.href = "start.html"
+		</script>
+		<%
+	} else {
+		%>
+		<script>
+			location.href = "start.html"
+		</script>
+		<%
+	}
 %>
 
-<p>아이디는 ${param.userid }</p>
-<p>비밀번호는 ${param.userpass }</p>
-<p><%=id %></p>
-
-
-</body>
-</html>
