@@ -11,7 +11,7 @@
 	String id = null;
 	int id_num = 1;
 	
-	if(userid.equals("admin1")) { id_num = 2; }
+	if(userid.equals("admin1")) { id_num = 2; } // admin id일 경우 admin login모드로 들어가게 id_num부여
 	
 	id = dao.login(userid, userpass, id_num);
 	
