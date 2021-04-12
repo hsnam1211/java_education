@@ -31,8 +31,8 @@ form > input {
 </style>
 </head>
 <%
-	/* String errMsg = (String)request.getAttribute("errMsg"); */
-	String errMsg = (String)session.getAttribute("errMsg");
+	String errMsg = (String)request.getAttribute("errMsg");
+	/* String errMsg = (String)session.getAttribute("errMsg"); */
 	
 	if(errMsg == null) {
 		errMsg = "";

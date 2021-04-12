@@ -67,7 +67,7 @@ body
 	height:100%;
 	position: absolute;
 	top:0;
-	z-index: 1;
+	z-index: 4;
 }
 #sidebar_list {
 	display:inline-flex;
@@ -102,18 +102,12 @@ body
 	
 }
 
-#contents img
-{
-	width: 100%;
-	height:100%;
-	z-index: 1;
-}
 header img
 {
 	margin: 77px;
 	width: 220px;
 	position: relative;
-	z-index: 2;
+	z-index: 5;
 }
 #wise_saying
 {
@@ -121,7 +115,7 @@ header img
 	position: absolute;
 	bottom: 37px;
 	padding: 0 0 70px 60px;
-	z-index: 2;
+	z-index: 5;
 	mix-blend-mode: difference;
 }
 
@@ -137,10 +131,27 @@ header img
 }
 
 </style>
-
+<script>
+	window.history.forward(); // 로그아웃 후 뒤로가기 막기
+	function noBack(){window.history.forward();}
+</script>
+<script>
+	$(function() {
+		$(".book_search").on("click", function() {
+			$("#contents").load("maskTest.jsp");
+		});
+	});
+</script>
+<%
+	String userid = (String)session.getAttribute("userid"); // 로그인 시 입력한 id를 login.jsp에서 전달해준다.
+	
+	if(userid == null) {
+		userid = "";
+	}
+%>
 
 </head>
-<body>
+<body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload=""> // 로그아웃 후 뒤로가기 막기
 	<div id="container">	
 		<header>	
 			<img src="/webProject(hoos)/00Hoos/images/스케치.png">	
@@ -149,9 +160,17 @@ header img
 			<div id="contents">
 			</div>
 			<aside id="sidebar_warpper">
+				<div id="id_area">
+					<%=userid %>님 환영합니다.
+				</div>
 				<div id="sidebar_list">
-					<a class="user_login" href="userlogin.jsp">로그인</a>
-					<a class="main_page" href="main.html">둘러보기</a>
+					<a href="logout.jsp">로그아웃</a>
+					<a class="book_search" href="#">도서 검색</a>
+					<a class="book_borrow" href="#">도서 대출</a>
+					<a class="book_return" href="#">도서 반납</a>
+					<a class="book_extend" href="#">도서 연장</a>
+					<a class="book_reservation" href="#">도서 예약</a>
+					
 				</div>
 			</aside>
 			<div id="wise_saying">
