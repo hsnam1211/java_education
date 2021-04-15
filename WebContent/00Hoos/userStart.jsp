@@ -149,7 +149,22 @@ header img
   position: relative;
   top: 383px;
 }
-
+<%
+	String userid = (String)session.getAttribute("userid"); // 로그인 시 입력한 id를 login.jsp에서 전달해준다.
+	String status = request.getParameter("status"); // 도서 대출 시 대출 상태를 가져온다.
+	String bookno = request.getParameter("bookno"); // 도서 대출 시 도서 번호를 가져온다.
+	
+	if(userid == null) {
+		userid = "";
+	}
+	if(status == null) {
+		status = "";
+	}
+	if(bookno == null) {
+		bookno = "";
+	}
+	out.print(bookno);
+%>
 </style>
 <!-- <script>
 	window.history.forward(); // 로그아웃 후 뒤로가기 막기
@@ -171,7 +186,7 @@ header img
 	    $('.window').show();
 	}
 	$(function() {
-		// 클릭 시 도서 셀렉 및 contents배경 불투명하게 전환
+		// 클릭 시 전체도서 셀렉 및 contents배경 불투명하게 전환
 		$("#book_search").on("click", function() {
 			$.ajax({
 				url:"bookselectall",
@@ -180,6 +195,8 @@ header img
 				}
 			});
 		});
+		
+		// 도서제목 입력 후 검색버튼 누를 시 검색한 도서 셀렉
 		$("#booksearch_btn").on("click", function() {
 			$.ajax({
 				url:"booksearch",
@@ -189,6 +206,24 @@ header img
 				}
 			});
 		});
+		
+		// 원하는 도서 check후 도서대출 버튼 누를 시 대출
+		$("#book_borrow").on("click", function(e) {
+			e.preventDefault();
+			<%-- alert("<%=bookno%>");
+			alert("<%=status%>"); --%>
+			$.ajax({
+				url:"bookborrow",
+				data:{
+					"bookno":"<%=bookno%>",
+					"status":"<%=status%>",
+					"userid":"<%=userid%>"},
+				success:function(responseData) {
+					$("#mask").html(responseData);
+				}
+			});
+		});
+		
 	    $(".btn").on("click",function() {
 			//막 띄우기
 			wrapWindowByMask();
@@ -201,13 +236,6 @@ header img
         });  
 	});
 </script>
-<%
-	String userid = (String)session.getAttribute("userid"); // 로그인 시 입력한 id를 login.jsp에서 전달해준다.
-	
-	if(userid == null) {
-		userid = "";
-	}
-%>
 
 </head>
 <!-- <body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload=""> --> 
