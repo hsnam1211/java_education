@@ -92,7 +92,7 @@ public class LibDAO {
 
 	
 	// 2.도서검색(이용자 or 관리자)
-	public List<LibBookVO> getBook(int num) {
+	public List<LibBookVO> getBook(int num, String bookname) {
 		List<LibBookVO> bookList = new ArrayList<>();
 		String sql = null;
 		
@@ -105,11 +105,12 @@ public class LibDAO {
 				sql = "select * from book_list order by book_no";	
 				st = conn.prepareStatement(sql);
 			} else if(num == 2) {
-				Scanner sc = new Scanner(System.in);
+//				Scanner sc = new Scanner(System.in);
 				sql = "select * from book_list where book_name = ? order by book_no";
 				
-				System.out.print("조회하실 도서 제목을 입력해주세요. >>");
-				String book_name = sc.nextLine();
+//				System.out.print("조회하실 도서 제목을 입력해주세요. >>");
+				String book_name = bookname;
+//				String book_name = sc.nextLine();
 				st = conn.prepareStatement(sql);
 				st.setString(1, book_name);
 			} else if(num == 3) {
@@ -383,8 +384,8 @@ public class LibDAO {
 		PreparedStatement st;
 		
 		try {
-			for(int i=0;i<getBook(1).size();i++) { 
-				if(getBook(1).get(i).getBook_no() == book_no) {
+			for(int i=0;i<getBook(1,"").size();i++) { 
+				if(getBook(1,"").get(i).getBook_no() == book_no) {
 					for(j=0;j<borrowUserList(user_id).size();j++) { // 도서가 있지만 자신이 대출한 도서가 아닐 때
 						if(borrowUserList(user_id).get(j).getBook_no() == book_no) {
 							st = conn.prepareStatement(sql);

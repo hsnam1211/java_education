@@ -141,7 +141,7 @@ header img
 	}
 %>
 </head>
-<body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload=""> // 로그아웃 후 뒤로가기 막기
+<body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload=""> 
 	<div id="container">	
 		<header>	
 			<img src="/webProject(hoos)/00Hoos/images/스케치.png">	

@@ -23,6 +23,7 @@ html, body {
 body
 {	 
 	animation: background_img 20s ease-in infinite;
+	
 }
 
  @keyframes background_img {
@@ -86,10 +87,6 @@ body
 	text-align: center;
 }
 
-/* #sidebar .user_login { left: 150px; }
-#sidebar .admin_login {	left: 144px; }
-#sidebar .main_page { left: 160px; } */
-
 #sidebar_list > a:hover 
 {
 	color: gray;
@@ -109,37 +106,99 @@ header img
 	position: relative;
 	z-index: 5;
 }
-#wise_saying
-{
-	font-family: 'Noto Serif KR', serif;
-	position: absolute;
-	bottom: 37px;
-	padding: 0 0 70px 60px;
-	z-index: 5;
-	mix-blend-mode: difference;
+#mask {
+  position:absolute;
+  z-index:2;
+  background-color:rgb(239, 238, 226);
+  display:none;
+  left:0;
+  top:0;
+  text-align: center;
 }
-
-#wise_saying h2
-{
-	color: #808080;
+.window{
+  display: none;
+  position:absolute;
+  right:55px;
+  top:40px;
+  z-index:3;
 }
-
-#wise_saying .name 
-{
-	padding: 0 0 0 30px;
-	color: #d3d3d3;
+#close {
+  color:gray;
+  text-decoration:none;
+  font-size: 30px;
+}
+#tb {
+  position:absolute;
+  width:500px;
+  top: 200px;
+  left: 400px;
+  z-index:3;
+}
+#book_name {
+  border-left-width: 0;
+  border-right-width: 0;
+  border-top-width: 0;
+  border-bottom-width: 1;
+  width: 60%;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.3);
+  text-align: center;
+}
+#search {
+  text-align: center;
+  position: relative;
+  top: 383px;
 }
 
 </style>
-<script>
+<!-- <script>
 	window.history.forward(); // 로그아웃 후 뒤로가기 막기
 	function noBack(){window.history.forward();}
-</script>
+</script> -->
 <script>
+	function wrapWindowByMask(){
+	    //화면의 높이와 너비를 구한다.
+	    var maskHeight = $(document).height();
+	    var maskWidth = $(window).width();  
+	
+	    //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+	    $('#mask').css({'width':maskWidth,'height':maskHeight});  
+	
+	    //애니메이션 효과 - 일단 1초동안 까맣게 됐다가 80% 불투명도로 간다.
+	    $('#mask').fadeTo("slow",0.8);    
+	
+	    //윈도우 같은 거 띄운다.
+	    $('.window').show();
+	}
 	$(function() {
-		$(".book_search").on("click", function() {
-			$("#contents").load("maskTest.jsp");
+		// 클릭 시 도서 셀렉 및 contents배경 불투명하게 전환
+		$("#book_search").on("click", function() {
+			$.ajax({
+				url:"bookselectall",
+				success:function(responseData) {
+					$("#mask").html(responseData);
+				}
+			});
 		});
+		$("#booksearch_btn").on("click", function() {
+			$.ajax({
+				url:"booksearch",
+				data:{"bookname":$("#book_name").val()},
+				success:function(responseData) {
+					$("#mask").html(responseData);
+				}
+			});
+		});
+	    $(".btn").on("click",function() {
+			//막 띄우기
+			wrapWindowByMask();
+	    });
+        //닫기 버튼을 눌렀을 때
+        $('.window #close').click(function (e) {
+            //링크 기본동작은 작동하지 않도록 한다.
+            e.preventDefault();
+            $('#mask, .window').hide();
+        });  
 	});
 </script>
 <%
@@ -151,33 +210,39 @@ header img
 %>
 
 </head>
-<body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload=""> // 로그아웃 후 뒤로가기 막기
+<!-- <body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload=""> --> 
+<body> 
 	<div id="container">	
 		<header>	
-			<img src="/webProject(hoos)/00Hoos/images/스케치.png">	
+			<img src="/webProject(hoos)/00Hoos/images/스케치.png">
 		</header>
 		<main>
 			<div id="contents">
+				<div id="mask">
+					여기!
+				</div>
+			</div>
+			    <div class="window">
+			    	<a id="close" href="#">X</a>
+			    </div>
 			</div>
 			<aside id="sidebar_warpper">
 				<div id="id_area">
 					<%=userid %>님 환영합니다.
 				</div>
+				<div id="search">
+					<input type="text" id="book_name" name="bookname" placeholder="도서 제목을 입력하세요.">
+					<button type="button" id="booksearch_btn" class="booksearch_btn">검색</button>
+				</div>
 				<div id="sidebar_list">
 					<a href="logout.jsp">로그아웃</a>
-					<a class="book_search" href="#">도서 검색</a>
-					<a class="book_borrow" href="#">도서 대출</a>
-					<a class="book_return" href="#">도서 반납</a>
-					<a class="book_extend" href="#">도서 연장</a>
-					<a class="book_reservation" href="#">도서 예약</a>
-					
+					<a class="btn" id="book_search" href="#">도서 검색</a>
+					<a class="btn" id="book_borrow" href="#">도서 대출</a>
+					<a class="btn" id="book_return" href="#">도서 반납</a>
+					<a class="btn" id="book_extend" href="#">도서 연장</a>
+					<a class="btn" id="book_reservation" href="#">도서 예약</a>
 				</div>
 			</aside>
-			<div id="wise_saying">
-				<h2>남후승 도서관에 오신 것을 환영합니다.</h2>
-				<p class="name"><b>좋은 양서를 읽는다는 것은 지난 몇 세기에 걸친 훌륭한 위인들과 대화를 하는 것과 같다.</b></p>
-				<p class="name">- 데카르트 -</p>
-			</div>
 		</main>
 	</div>
 </body>
