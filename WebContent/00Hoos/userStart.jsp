@@ -153,6 +153,7 @@ header img
 	String userid = (String)session.getAttribute("userid"); // 로그인 시 입력한 id를 login.jsp에서 전달해준다.
 	String status = request.getParameter("status"); // 도서 대출 시 대출 상태를 가져온다.
 	String bookno = request.getParameter("bookno"); // 도서 대출 시 도서 번호를 가져온다.
+	String message = request.getParameter("message"); // 요청 처리 후의 메시지를 가져온다.
 	
 	if(userid == null) {
 		userid = "";
@@ -163,7 +164,6 @@ header img
 	if(bookno == null) {
 		bookno = "";
 	}
-	out.print(bookno);
 %>
 </style>
 <!-- <script>
@@ -210,15 +210,15 @@ header img
 		// 원하는 도서 check후 도서대출 버튼 누를 시 대출
 		$("#book_borrow").on("click", function(e) {
 			e.preventDefault();
-			<%-- alert("<%=bookno%>");
-			alert("<%=status%>"); --%>
+			var obj = JSON.parse(history.state);
 			$.ajax({
 				url:"bookborrow",
 				data:{
-					"bookno":"<%=bookno%>",
-					"status":"<%=status%>",
+					"bookno":obj.bookno,
+					"status":obj.status,
 					"userid":"<%=userid%>"},
-				success:function(responseData) {
+				success:function(responseData) { 
+					
 					$("#mask").html(responseData);
 				}
 			});

@@ -257,6 +257,90 @@ public class LibDAO {
 		return result;
 	}
 
+	// web용 대출함수
+	public int borrowBookStatus1(int book_no, String status, String user_id) { // 선택한 책 row 한 줄을 가져오고, status엔 대여가능 여부(Y,N)를 가져온다.
+		int result = 0;
+		int num = 0;
+		String borrow_status = null;
+		String sql1 = "select book_borrow_status from book_list where book_no = ?";
+		String sql2 = " update book_list"
+				+ " set"
+				+ " book_borrow_status = ?"
+				+ " where book_no = ?";
+				
+		Connection conn = DBUtil.getConnection();
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = conn.prepareStatement(sql1);
+			st.setInt(1, book_no);
+			rs = st.executeQuery();
+			while(rs.next()) {
+				borrow_status = rs.getString("book_borrow_status");
+			}
+			
+			if(borrow_status == null) { // 없는 도서일 때
+				System.out.println("없는 데이터 입니다.");
+				return -1;
+			} else if(!borrow_status.equals(status)) {
+				if(status.equals("N")) { // 빌릴 수 있을 때
+					if(reservationTop1(user_id, book_no).getBook_no() == 0) {
+						st = conn.prepareStatement(sql2);
+						
+						st.setString(1, status);
+						st.setInt(2, book_no);
+						result = st.executeUpdate();		
+					} else {
+						if(reservationTop1(user_id, book_no).getBook_no() == book_no && reservationTop1(user_id, book_no).getUser_id().equals(user_id)) {
+							st = conn.prepareStatement(sql2);
+							
+							st.setString(1, status);
+							st.setInt(2, book_no);
+							result = st.executeUpdate();
+							
+							// 예약 저장 딜리트
+							reservationSaveDelete(user_id, book_no);
+							// 예약 대기 명단 딜리트 메서드 
+							reservationListDelete(book_no);
+						} else {
+							System.out.println("예약 대기 중인 도서입니다.");
+							return -1;
+						}
+					}
+				} else {
+					for(int i=0;i<borrowUserList(user_id).size();i++) { 
+						if(borrowUserList(user_id).get(i).getBook_no() == book_no) {
+							st = conn.prepareStatement(sql2);
+							
+							st.setString(1, status);
+							st.setInt(2, book_no);
+							result = st.executeUpdate();
+							// 여기에서 예약리스트 조회해서 있으면 로그인 메시지 메서드로 전달 
+							if(reservationTop1(user_id, book_no).getBook_no() != 0) {
+								reservationSave(reservationTop1(user_id, book_no).getUser_id(), reservationTop1(user_id, book_no).getBook_no());
+								
+							}
+							return result;
+						}
+					}
+					// 리스트에 도서가 있지만 자신이 대출한 도서가 아닐 때
+					return 0;
+				}
+			}	
+		} 
+
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs, st, conn);
+		}
+		
+		return result;
+	}
+
+	
 
 	
 	// insert 도서 대출 명단

@@ -53,7 +53,7 @@ form > input {
 								<td><input type="text" id="userid" name="userid" autofocus placeholder="ID"><br></td>						
 							</tr>
 							<tr>
-								<td><input type="text" id="userpass" name="userpass" placeholder="PASSWORD"><br></td>
+								<td><input type="password" id="userpass" name="userpass" placeholder="PASSWORD"><br></td>
 							</tr>
 							<tr>
 								<td id="error"><%=errMsg %></td>

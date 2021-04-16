@@ -29,8 +29,8 @@ public class BookSearchServlet extends HttpServlet {
 		LibDAO dao = new LibDAO();
 		List<LibBookVO> book = dao.getBook(2, bookname);
 		request.setAttribute("book1", book);
-		System.out.println(book + "ㅇㅇㅇㅇㅇㅇㅇㅇ");
-//		// 서블릿이 받은 요청을 JSP에 넘기기 (위임)
+		System.out.println(book);
+		// 서블릿이 받은 요청을 JSP에 넘기기 (위임)
 		RequestDispatcher rd = request.getRequestDispatcher("bookSearch.jsp");
 		rd.forward(request, response);
 	}

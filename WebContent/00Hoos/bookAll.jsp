@@ -24,6 +24,7 @@
 <!-- jQeury -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
+
 function doOpenCheck(chk){
     var obj = document.getElementsByName("check");
     for(var i=0; i<obj.length; i++){
@@ -31,6 +32,7 @@ function doOpenCheck(chk){
             obj[i].checked = false;
         }
     }
+ 
 	var checkbox = $("input[name='check']:checked");
 	var col1 = "";
 	var col2 = "";
@@ -51,12 +53,14 @@ function doOpenCheck(chk){
 		} else {
 			col4 = "N";
 		}
-		forward.href="userStart.jsp?bookno="+col1+"&status="+col4; // get 방식으로 userStart.jsp로 값을 전달
 		
+		var state = '{"bookno": '+col1+', "status": "'+col4+'"}';
+		var title = '';
+		var url = "userStart.jsp";
+		
+		history.pushState(state, title, url)
 	}); 
-	
 }
-
 
 </script>
 </head>
