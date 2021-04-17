@@ -256,6 +256,62 @@ public class LibDAO {
 		
 		return result;
 	}
+	
+	//web용 반납함수
+	public int returnBookStatus(int book_no, String status, String user_id) { // 선택한 책 row 한 줄을 가져오고, status엔 대여가능 여부(Y,N)를 가져온다.
+		Scanner sc = new Scanner(System.in);
+		int result = 0;
+		int num = 0;
+		String borrow_status = null;
+		String sql1 = "select book_borrow_status from book_list where book_no = ?";
+		String sql2 = " update book_list"
+				+ " set"
+				+ " book_borrow_status = ?"
+				+ " where book_no = ?";
+		
+		Connection conn = DBUtil.getConnection();
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = conn.prepareStatement(sql1);
+			st.setInt(1, book_no);
+			rs = st.executeQuery();
+			while(rs.next()) {
+				borrow_status = rs.getString("book_borrow_status");
+			}
+			
+			if(!borrow_status.equals(status)) {
+				if(status.equals("Y")) {
+					for(int i=0;i<borrowUserList(user_id).size();i++) { 
+						if(borrowUserList(user_id).get(i).getBook_no() == book_no) {
+							st = conn.prepareStatement(sql2);
+							
+							st.setString(1, status);
+							st.setInt(2, book_no);
+							result = st.executeUpdate();
+							// 여기에서 예약리스트 조회해서 있으면 로그인 메시지 메서드로 전달 
+							if(reservationTop1(user_id, book_no).getBook_no() != 0) {
+								reservationSave(reservationTop1(user_id, book_no).getUser_id(), reservationTop1(user_id, book_no).getBook_no());	
+							}
+							return result;
+						}
+					}
+					// 리스트에 도서가 있지만 자신이 대출한 도서가 아닐 때
+					return 0;
+				}
+			}	
+		} 
+		
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(rs, st, conn);
+		}
+		
+		return result;
+	}
 
 	// web용 대출함수
 	public int borrowBookStatus1(int book_no, String status, String user_id) { // 선택한 책 row 한 줄을 가져오고, status엔 대여가능 여부(Y,N)를 가져온다.
@@ -971,7 +1027,7 @@ public class LibDAO {
 		List<BorrowListVO> borrowList = new ArrayList<>();
 		String sql = "select * "
 				+ " from book_borrow_list "
-				+ " where user_id = ?";
+				+ " where user_id = ? order by borrow_date";
 		Connection conn = DBUtil.getConnection();
 		PreparedStatement st = null;
 		ResultSet rs = null;
