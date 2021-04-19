@@ -74,7 +74,7 @@ body
 	display:inline-flex;
 	flex-direction: column;
 	top: 430px;
-	left: 153px;
+	left: 116px;
 	position: absolute;
 }
 
@@ -207,21 +207,7 @@ header img
 			});
 		});
 		
-		// 원하는 도서 check후 도서대출 버튼 누를 시 대출
-		$("#book_borrow").on("click", function(e) {
-			/* e.preventDefault(); */
-			var obj = JSON.parse(history.state);
-			$.ajax({
-				url:"bookborrow",
-				data:{
-					"bookno":obj.bookno,
-					"status":obj.status,
-					"userid":"<%=userid%>"},
-				success:function(responseData) { 
-					$("#mask").html(responseData);
-				}
-			}); 
-		});
+		
 	
 		// user가 대출한 도서 목록을 셀렉
 		$("#book_return_list").on("click", function(e) {
@@ -279,7 +265,7 @@ header img
 				<div id="sidebar_list">
 					<a href="logout.jsp">로그아웃</a>
 					<a class="btn" id="book_search" href="#">도서 검색</a>
-					<a class="btn" id="book_borrow" href="#">도서 대출</a>
+					<!-- <a class="btn" id="book_borrow" href="#">도서 대출</a> -->
 					<a class="btn" id="book_return_list" href="#">대출 도서 목록/반납</a>
 					<a class="btn" id="book_extend" href="#">도서 연장</a>
 					<a class="btn" id="book_reservation" href="#">도서 예약</a>

@@ -9,6 +9,7 @@
 <title>Insert title here</title>
 <% 	
 	List<LibBookVO> booklist = (List<LibBookVO>)request.getAttribute("book");
+	String userid = (String)session.getAttribute("userid");
 %>
 	
 <style>
@@ -24,7 +25,10 @@
 <!-- jQeury -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-
+var col1 = "";
+var col2 = "";
+var col3 = "";
+col4 = "";
 function doOpenCheck(chk){
     var obj = document.getElementsByName("check");
     for(var i=0; i<obj.length; i++){
@@ -34,10 +38,7 @@ function doOpenCheck(chk){
     }
  
 	var checkbox = $("input[name='check']:checked");
-	var col1 = "";
-	var col2 = "";
-	var col3 = "";
-	var col4 = "";
+	
 	
 	checkbox.each(function(i) {
 		var tr = checkbox.parent().parent().eq(i); //checkbox 태그의 두 단계 상위 태그인 tr을 가리킴
@@ -50,16 +51,24 @@ function doOpenCheck(chk){
 		
 		if(col4 == "대출가능") {
 			col4 = "Y";
+			
 		} else {
 			col4 = "N";
 		}
-		
-		var state = '{"bookno": '+col1+', "status": "'+col4+'"}';
-		var title = '';
-		var url = "userStart.jsp";
-		
-		history.pushState(state, title, url)
 	}); 
+	
+	// 원하는 도서 check후 도서대출 버튼 누를 시 대출
+	$(".bookreturn").on("click", function(e) {
+		$.ajax({
+			url:"bookborrow",
+			data:{
+				"bookno":col1,
+				"userid":"<%=userid%>"},
+			success:function(responseData) { 
+				$("#mask").html(responseData);
+			}
+		}); 
+	});
 }
 
 </script>
@@ -81,11 +90,10 @@ function doOpenCheck(chk){
 			<td><%=book.getBook_no()%></td>
 			<td><%=book.getBook_name()%></td>
 			<td><%=book.getBook_writer()%></td>
-			<td><%=book.getBook_borrow_status()%></td>
+			<td class="status"><%=book.getBook_borrow_status()%></td>
+			<td><button name="btn" type="button" class="bookreturn">도서대출</button></td>		
 		</tr>
 		<%} %>
 	</table>    
 </body>
 </html>
-
-

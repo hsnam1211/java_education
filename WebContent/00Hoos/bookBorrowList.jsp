@@ -25,7 +25,6 @@
 <!-- jQeury -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-
 function doOpenCheck(chk){
     var obj = document.getElementsByName("check");
     for(var i=0; i<obj.length; i++){
@@ -35,7 +34,7 @@ function doOpenCheck(chk){
     }
  
 	var checkbox = $("input[name='check']:checked");
-	col1 = "";
+	var col1 = "";
 	var col2 = "";
 	var col3 = "";
 	var col4 = "";
@@ -49,10 +48,9 @@ function doOpenCheck(chk){
 		col3 = td.eq(3).text();
 		col4 = td.eq(4).text();
 	}); 
-}
-
-$(function() {
-	$("#bookreturn").on("click", function() {
+	
+	$(".bookreturn").on("click", function() {
+		
 		$.ajax({
 			url:"bookreturn",
 			data:{
@@ -63,7 +61,7 @@ $(function() {
 			}
 		});
 	});
-});
+}
 
 </script>
 </head>
@@ -79,7 +77,7 @@ $(function() {
 			<td><%=book.getBook_name()%></td>
 			<td><%=book.getBorrow_date()%></td>
 			<td><%=book.getReturn_date()%></td>
-			<td><button type="button" id="bookreturn">도서반납</td>			
+			<td><button type="button" class="bookreturn">도서반납</td>			
 		</tr>
 		<%} %>
 	</table>    
