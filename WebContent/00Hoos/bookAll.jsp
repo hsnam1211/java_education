@@ -58,9 +58,22 @@ function doOpenCheck(chk){
 	}); 
 	
 	// 원하는 도서 check후 도서대출 버튼 누를 시 대출
-	$(".bookreturn").on("click", function(e) {
+	$(".bookborrow").on("click", function(e) {
 		$.ajax({
 			url:"bookborrow",
+			data:{
+				"bookno":col1,
+				"userid":"<%=userid%>"},
+			success:function(responseData) { 
+				$("#mask").html(responseData);
+			}
+		}); 
+	});
+	
+	// 원하는 도서 check후 도서예약 버튼 누를 시 예약
+	$(".bookreservation").on("click", function(e) {
+		$.ajax({
+			url:"bookreservation",
 			data:{
 				"bookno":col1,
 				"userid":"<%=userid%>"},
@@ -91,7 +104,13 @@ function doOpenCheck(chk){
 			<td><%=book.getBook_name()%></td>
 			<td><%=book.getBook_writer()%></td>
 			<td class="status"><%=book.getBook_borrow_status()%></td>
-			<td><button name="btn" type="button" class="bookreturn">도서대출</button></td>		
+			<%
+				if(book.getBook_borrow_status().equals("대출가능")) {					
+					out.print("<td><button name='btn' type='button' class='bookborrow'>도서대출</button></td>");		
+				} else {
+					out.print("<td><button name='btn' type='button' class='bookreservation'>도서예약</button></td>");							
+				}
+			%>
 		</tr>
 		<%} %>
 	</table>    

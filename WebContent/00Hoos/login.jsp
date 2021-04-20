@@ -1,7 +1,6 @@
 <%@page import="model.LibDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <%
 	String userid = request.getParameter("userid");
 	String userpass = request.getParameter("userpass");
@@ -31,8 +30,17 @@
 		response.sendRedirect("adminStart.jsp");
 
 	} else {
+		String message = ""; 
+		if(dao.getReservationSave(userid) != null) {
+			for(int i=0; i<dao.getReservationSave(userid).size();i++) {
+				if(userid.equals(dao.getReservationSave(userid).get(i).getUser_id())) {
+					message = "예약하신 도서 NO."+dao.getReservationSave(userid).get(i).getBook_no()+ "대출 가능합니다.";
+				}					
+			}
+		}
+		/* request.setAttribute("message", message); */
 		session.setAttribute("userid", userid); // 세션에 "userid"를 키로 userid를 저장 
-		response.sendRedirect("userStart.jsp");
+		response.sendRedirect("userStart.jsp?message="+message);
 	}
 	
 %>

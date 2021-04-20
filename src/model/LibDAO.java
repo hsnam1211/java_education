@@ -183,7 +183,7 @@ public class LibDAO {
 				if(status.equals("N")) {
 					System.out.print("도서를 대출하시겠습니까? >>");	
 					num = sc.nextInt();
-				} else {
+				} else { //반납
 					for(int i=0;i<borrowUserList(user_id).size();i++) { 
 						if(borrowUserList(user_id).get(i).getBook_no() == book_no) {
 							System.out.print("도서를 반납하시겠습니까? >>");					
@@ -196,7 +196,7 @@ public class LibDAO {
 								st.setInt(2, book_no);
 								result = st.executeUpdate();
 								// 여기에서 예약리스트 조회해서 있으면 로그인 메시지 메서드로 전달 
-								if(reservationTop1(user_id, book_no).getBook_no() != 0) {
+								if(reservationTop1(user_id, book_no).getBook_no() != 0) { //반납하기 전 예약순번 1번이 있는지 확인한다. 있으면 if문 실행
 									reservationSave(reservationTop1(user_id, book_no).getUser_id(), reservationTop1(user_id, book_no).getBook_no());
 								
 								}
@@ -212,15 +212,17 @@ public class LibDAO {
 					// 리스트에 도서가 있지만 자신이 대출한 도서가 아닐 때
 					return 0;
 				}
-				if(num == 1) {
+				
+				
+				if(num == 1) { //대출
 					
-					if(reservationTop1(user_id, book_no).getBook_no() == 0) {
+					if(reservationTop1(user_id, book_no).getBook_no() == 0) { //대출하기 전 예약순번 1번이 있는지 확인한다. 있다면 else로 
 						st = conn.prepareStatement(sql2);
 						
 						st.setString(1, status);
 						st.setInt(2, book_no);
-						result = st.executeUpdate();		
-					} else {
+						result = st.executeUpdate(); //없다면 지금 대출하기 
+					} else {												  //예약순번 1번이 있다면 그게 나인지 확인한다. 
 						if(reservationTop1(user_id, book_no).getBook_no() == book_no && reservationTop1(user_id, book_no).getUser_id().equals(user_id)) {
 							st = conn.prepareStatement(sql2);
 							
@@ -229,9 +231,9 @@ public class LibDAO {
 							result = st.executeUpdate();
 							
 							// 예약 저장 딜리트
-							reservationSaveDelete(user_id, book_no);
+							reservationSaveDelete(user_id, book_no); // 1번이었던 내 순번 지우기
 							// 예약 대기 명단 딜리트 메서드 
-							reservationListDelete(book_no);
+							reservationListDelete(book_no); // 예약 전체명단에서 내 이름 지우기
 						} else {
 							System.out.println("예약 대기 중인 도서입니다.");
 							return -1;
@@ -554,12 +556,31 @@ public class LibDAO {
 	public int reservationBook(String user_id, int book_no) {
 		int result = 0;
 		List<LibBookVO> bookList = new ArrayList<>();
+		List<BorrowListVO> bookBorrowList = getBorrowList(user_id);
+		List<ReservationListVO> bookReservationList = getReservationList(user_id);
 		String sql = null;
 		
 		Connection conn = DBUtil.getConnection();
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		sql = "select * from book_list where book_borrow_status = 'N' and book_no = ? order by book_no";
+		
+		// 도서 예약자 리스트(getBorrowList())에서 user_id와 book_no조회해서 있을 시 "현재 대출중인 도서입니다." 띄우고 예약불가
+		if(!bookBorrowList.isEmpty()) {
+			for(BorrowListVO bookBorrow:bookBorrowList) {
+				if(bookBorrow.getBook_no() == book_no) {
+					return 2; // "현재 대출중인 도서입니다."
+				}
+			}			
+		}
+		// 없을 시 예약자 명단에서 user_id와 book_no조회해서 있을 시 "현재 예약중인 도서입니다." 띄우고 예약불가
+		if(!bookReservationList.isEmpty()) {
+			for(ReservationListVO bookReservation:bookReservationList) {
+				if(bookReservation.getBook_no() == book_no) {
+					return 3; // "이미 예약하신 도서입니다."
+				}
+			}			
+		}
 		
 		try {
 			st = conn.prepareStatement(sql);
@@ -570,7 +591,7 @@ public class LibDAO {
 				bookList.add(makeBookList(rs));
 			}
 			if(bookList.isEmpty()) {
-				System.out.println("예약 불가능한 도서입니다.");
+				return 0; // "예약 불가능한 도서입니다."
 			} else {
 				sql = "insert into book_reservation_list(user_id, book_no) values(?, ?)";
 				st = conn.prepareStatement(sql);
@@ -587,6 +608,45 @@ public class LibDAO {
 		}
 		return result;
 	}
+	
+	// 도서 예약 명단 리스트 
+	public List<ReservationListVO> getReservationList(String user_id) {
+		List<ReservationListVO> bookReservationList = new ArrayList<>();
+		String sql = "select * from book_reservation_list where user_id = ?";
+		
+		Connection conn = DBUtil.getConnection();
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+				st = conn.prepareStatement(sql);
+				st.setString(1, user_id);
+				rs = st.executeQuery();
+				while(rs.next()) {
+					bookReservationList.add(makeBookReservationList(rs));					
+				}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally { 
+			DBUtil.close(rs, st, conn);
+		}
+		return bookReservationList;
+	}
+	
+	public ReservationListVO makeBookReservationList(ResultSet rs) throws SQLException { 
+		ReservationListVO bookReservationList = new ReservationListVO();
+		
+		bookReservationList.setUser_id(rs.getString("user_id"));
+		bookReservationList.setBook_no(rs.getInt("book_no"));
+		bookReservationList.setReservation_date(rs.getDate("reservation_date"));    
+		     
+		
+		
+		return bookReservationList;
+	};
+	
 	
 	// 예약 대기명단 1순위 
 	public ReservationListVO reservationTop1(String user_id, int book_no) { 
@@ -1040,10 +1100,6 @@ public class LibDAO {
 			while(rs.next()) {
 				borrowList.add(makeBorrowHistroyList(rs));
 			} 
-			if(borrowList.isEmpty()) {
-				return null;
-			}
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
