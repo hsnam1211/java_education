@@ -25,7 +25,7 @@
 	<div id="contents">			
 		<%
 			LibDAO dao = new LibDAO();
-			List<LibBookVO> libList = dao.getBook(1);
+			List<LibBookVO> libList = dao.getBook(1,"");
 			out.print("<table>");
 			for(LibBookVO lib:libList) {
 				out.print("<tr>");

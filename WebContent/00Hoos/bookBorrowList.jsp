@@ -61,6 +61,23 @@ function doOpenCheck(chk){
 			}
 		});
 	});
+	
+	
+	// user가 대출한 도서 목록을 셀렉
+	$(".bookextend").on("click", function(e) {
+		$.ajax({
+			url:"bookextend",
+			data:{
+				"bookno":col1,
+				"userid":"<%=userid%>"},
+			success:function(responseData) { 
+				$("#mask").html(responseData);
+			}
+		});
+	});
+	
+	
+	
 }
 
 </script>
@@ -77,7 +94,8 @@ function doOpenCheck(chk){
 			<td><%=book.getBook_name()%></td>
 			<td><%=book.getBorrow_date()%></td>
 			<td><%=book.getReturn_date()%></td>
-			<td><button type="button" class="bookreturn">도서반납</td>			
+			<td><button type="button" class="bookreturn">도서반납</td>
+			<td><button type="button" class="bookextend">도서연장</td>
 		</tr>
 		<%} %>
 	</table>    

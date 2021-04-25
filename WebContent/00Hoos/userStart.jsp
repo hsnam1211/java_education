@@ -31,31 +31,31 @@ body
 
  @keyframes background_img {
         
-    0% {background: url("/webProject(hoos)/00Hoos/images/제주바다.jpg") no-repeat center center fixed;
+    0% {background: url("/webLibraryProject/00Hoos/images/제주바다.jpg") no-repeat center center fixed;
     	background-position: 50% center;
     	background-size: cover;
     	width: 100%;
 		margin: 0;
     }
-    25% {background: url("/webProject(hoos)/00Hoos/images/제주바다2.jpg") no-repeat center center fixed;
+    25% {background: url("/webLibraryProject/00Hoos/images/제주바다2.jpg") no-repeat center center fixed;
     	background-position: 50% center;
     	background-size: cover;
     	width: 100%;
 		margin: 0;
     }
-    50% {background: url("/webProject(hoos)/00Hoos/images/소품샵.jpg") no-repeat center center fixed;
+    50% {background: url("/webLibraryProject/00Hoos/images/소품샵.jpg") no-repeat center center fixed;
     	background-position: 50% center;
     	background-size: cover;
     	width: 100%;
 		margin: 0;
     }
-    75% {background: url("/webProject(hoos)/00Hoos/images/풍경.jpg") no-repeat center center fixed;
+    75% {background: url("/webLibraryProject/00Hoos/images/풍경.jpg") no-repeat center center fixed;
     	background-position: 50% center;
     	background-size: cover;
     	width: 100%;
 		margin: 0;
     }
-    100% {background: url("/webProject(hoos)/00Hoos/images/제주바다.jpg") no-repeat center center fixed;
+    100% {background: url("/webLibraryProject/00Hoos/images/제주바다.jpg") no-repeat center center fixed;
     	background-position: 50% center;
     	background-size: cover;
     	width: 100%;
@@ -210,12 +210,10 @@ header img
 			});
 		});
 		
-		
-	
 		// user가 대출한 도서 목록을 셀렉
 		$("#book_return_list").on("click", function(e) {
-			e.preventDefault();
-			var obj = JSON.parse(history.state);
+			/* e.preventDefault();
+			var obj = JSON.parse(history.state); */
 			$.ajax({
 				url:"bookborrowlist",
 				data:{"userid":"<%=userid%>"},
@@ -224,7 +222,6 @@ header img
 				}
 			});
 		});
-		
 		
 		
 	    $(".btn").on("click",function() {
@@ -238,11 +235,13 @@ header img
             $('#mask, .window').hide();
         });  
         
-        
-        message();
+		
+        if("${reservationMessage}" != "") { // LoginServlet에서 예약순번 1순위일 경우 메시지를 띄워줌
+	        message();
+        }
 	});
 	function message() {
-		alert("${param.message}");
+		alert("${reservationMessage}");
 	}
 </script>
 
@@ -251,7 +250,7 @@ header img
 <body> 
 	<div id="container">	
 		<header>	
-			<img src="/webProject(hoos)/00Hoos/images/스케치.png">
+			<img src="/webLibraryProject/00Hoos/images/스케치.png">
 		</header>
 		<main>
 			<div id="contents">
@@ -276,8 +275,8 @@ header img
 					<a class="btn" id="book_search" href="#">도서 검색</a>
 					<!-- <a class="btn" id="book_borrow" href="#">도서 대출</a> -->
 					<a class="btn" id="book_return_list" href="#">대출 도서 목록/반납</a>
-					<a class="btn" id="book_extend" href="#">도서 연장</a>
-					<a class="btn" id="book_reservation" href="#">도서 예약</a>
+					<!-- <a class="btn" id="book_extend" href="#">도서 연장</a> -->
+					<!-- <a class="btn" id="book_reservation" href="#">도서 예약</a> -->
 				</div>
 			</aside>
 		</main>

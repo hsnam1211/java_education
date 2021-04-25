@@ -40,14 +40,15 @@ form > input {
 %>
 <body>
 	<header>
-		<img src="/webProject(hoos)/00Hoos/images/스케치.png" width="100px" >
+		<img src="/webLibraryProject/00Hoos/images/스케치.png" width="100px" >
 	</header>
 	
 	<main>
 		<section>
 			<fieldset id="login_view">
 				<legend><h1>로그인</h1></legend>
-					<form action="login.jsp" method="post">
+<!-- 					<form action="login.jsp" method="post"> -->
+					<form action="login" method="post">
 						<table>
 							<tr>
 								<td><input type="text" id="userid" name="userid" autofocus placeholder="ID"><br></td>						

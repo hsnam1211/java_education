@@ -27,31 +27,31 @@ body
 
  @keyframes background_img {
         
-    0% {background: url("/webProject(hoos)/00Hoos/images/제주바다.jpg") no-repeat center center fixed;
+    0% {background: url("/webLibraryProject/00Hoos/images/제주바다.jpg") no-repeat center center fixed;
     	background-position: 50% center;
     	background-size: cover;
     	width: 100%;
 		margin: 0;
     }
-    25% {background: url("/webProject(hoos)/00Hoos/images/제주바다2.jpg") no-repeat center center fixed;
+    25% {background: url("/webLibraryProject/00Hoos/images/제주바다2.jpg") no-repeat center center fixed;
     	background-position: 50% center;
     	background-size: cover;
     	width: 100%;
 		margin: 0;
     }
-    50% {background: url("/webProject(hoos)/00Hoos/images/소품샵.jpg") no-repeat center center fixed;
+    50% {background: url("/webLibraryProject/00Hoos/images/소품샵.jpg") no-repeat center center fixed;
     	background-position: 50% center;
     	background-size: cover;
     	width: 100%;
 		margin: 0;
     }
-    75% {background: url("/webProject(hoos)/00Hoos/images/풍경.jpg") no-repeat center center fixed;
+    75% {background: url("/webLibraryProject/00Hoos/images/풍경.jpg") no-repeat center center fixed;
     	background-position: 50% center;
     	background-size: cover;
     	width: 100%;
 		margin: 0;
     }
-    100% {background: url("/webProject(hoos)/00Hoos/images/제주바다.jpg") no-repeat center center fixed;
+    100% {background: url("/webLibraryProject/00Hoos/images/제주바다.jpg") no-repeat center center fixed;
     	background-position: 50% center;
     	background-size: cover;
     	width: 100%;
@@ -142,7 +142,7 @@ header img
 <body>
 	<div id="container">	
 		<header>	
-			<img src="/webProject(hoos)/00Hoos/images/스케치.png">	
+			<img src="/webLibraryProject/00Hoos/images/스케치.png">	
 		</header>
 		<main>
 			<div id="contents">

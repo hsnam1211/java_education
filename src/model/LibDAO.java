@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import logic.ReservationMessage;
 import util.DBUtil;
 import util.LoggableStatement;
 
@@ -361,6 +362,7 @@ public class LibDAO {
 							reservationSaveDelete(user_id, book_no);
 							// 예약 대기 명단 딜리트 메서드 
 							reservationListDelete(book_no);
+							
 						} else {
 							System.out.println("예약 대기 중인 도서입니다.");
 							return -1;
@@ -535,7 +537,7 @@ public class LibDAO {
 							result = st.executeUpdate();
 							return result;
 						}
-					} 
+					}
 					if(j == borrowUserList(user_id).size()) {
 						System.out.println(user_id+"님이 대출한 도서가 아닙니다.");
 						return result;
@@ -543,8 +545,6 @@ public class LibDAO {
 				}
 			}
 			System.out.println("없는 데이터 입니다.");
-			
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

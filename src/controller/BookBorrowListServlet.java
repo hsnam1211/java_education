@@ -23,11 +23,12 @@ public class BookBorrowListServlet extends HttpServlet {
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String userid = request.getParameter("userid");
+		String message = "null";
 		LibDAO dao = new LibDAO();
 		List<BorrowListVO> booklist = dao.getBorrowList(userid);
 		
 		request.setAttribute("book", booklist);
-		
+		request.setAttribute("reservationMessage", message);
 		// 서블릿이 받은 요청을 JSP에 넘기기 (위임)
 		RequestDispatcher rd = request.getRequestDispatcher("bookBorrowList.jsp");
 		rd.forward(request, response);
